@@ -1,0 +1,16 @@
+﻿@page "/"
+@attribute [RenderModeServer]
+
+<CCMainLayout AppAssembly="typeof(Index).Assembly">
+    <MenuItems>
+        <RadzenPanelMenuItem Text="菜单组1" Icon="home" >
+            <CCMenuItem PageType="typeof(Counter1)" />
+            <CCMenuItem PageType="typeof(Counter2)" />
+        </RadzenPanelMenuItem>
+        <RadzenPanelMenuItem Text="菜单组2" Icon="label">
+            <RadzenPanelMenuItem Text="Counter3" Icon="dashboard" />
+            <RadzenPanelMenuItem Text="Counter4" Icon="date_range" />
+        </RadzenPanelMenuItem>
+    </MenuItems>
+</CCMainLayout>
+

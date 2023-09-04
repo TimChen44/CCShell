@@ -1,0 +1,25 @@
+﻿@using System.Reflection
+
+<RadzenPanelMenuItem Text="@Text" Icon="@Icon" Path="@Path"/>
+
+@code {
+
+    [Parameter]
+    public Type PageType { get; set; }
+
+    string Text;
+    string Icon;
+    string Path;
+
+    protected override void OnInitialized()
+    {
+        var pageConfig = PageType.GetCustomAttribute<PageConfigAttribute>();
+        Text = pageConfig?.Title ?? PageType.Name;
+        Icon = pageConfig?.Icon ?? "";
+
+        Path = PageType.GetCustomAttribute<RouteAttribute>()?.Template ?? "";
+
+
+        base.OnInitialized();
+    }
+}

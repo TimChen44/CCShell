@@ -7,8 +7,13 @@
   </PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.10" />
 		<PackageReference Include="Radzen.Blazor" Version="*" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.0-preview.7.23375.9" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\CCShell.Entity\CCShell.Entity.csproj" />
 	</ItemGroup>
 
 </Project>

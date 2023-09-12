@@ -1,4 +1,5 @@
 using CCShell;
+using CCShell.Entity;
 using Radzen;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,6 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddServerComponents().AddWebAssemblyComponents();
 builder.Services.AddRazorPages();
+
+builder.Services.AddDbContextFactory<DataContext>();
 
 builder.Services.AddScoped<DialogService>();
 builder.Services.AddScoped<NotificationService>();

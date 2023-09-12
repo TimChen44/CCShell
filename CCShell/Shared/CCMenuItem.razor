@@ -18,8 +18,7 @@
         Icon = pageConfig?.Icon ?? "";
 
         Path = PageType.GetCustomAttribute<RouteAttribute>()?.Template ?? "";
-
-
+        
         base.OnInitialized();
     }
 }

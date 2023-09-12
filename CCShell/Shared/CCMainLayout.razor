@@ -1,18 +1,14 @@
-﻿@using System.Reflection;
-@attribute [RenderModeServer]
-
-<RadzenLayout>
+﻿<RadzenLayout>
     <RadzenHeader>
         <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0">
             <RadzenSidebarToggle Click="@(() => sidebar1Expanded = !sidebar1Expanded)" />
             <RadzenLabel Text="Header" />
         </RadzenStack>
     </RadzenHeader>
-    <RadzenSidebar Style="@(sidebar1Expanded?"overflow-x:hidden;":"overflow-x:hidden;width:57px")">
-        <RadzenPanelMenu Multiple=false Style="white-space: nowrap;">
+    <RadzenSidebar Style="width:auto">
+        <RadzenPanelMenu Multiple=false DisplayStyle="@(sidebar1Expanded?MenuItemDisplayStyle.IconAndText:MenuItemDisplayStyle.Icon)">
             @MenuItems
         </RadzenPanelMenu>
-
     </RadzenSidebar>
     <RadzenBody Style="padding:0px;margin:0px">
         <RadzenTabs @ref="@Tabs" RenderMode="TabRenderMode.Client" @bind-SelectedIndex="@SelectedIndex" class="CCTabs">
@@ -46,42 +42,3 @@
     }
 </style>
 
-@code {
-    bool sidebar1Expanded = true;
-    List<PageData> PageDatas = new List<PageData>();
-    RadzenTabs Tabs;
-
-    int SelectedIndex;
-
-    [Parameter]
-    [EditorRequired]
-    public Assembly AppAssembly { get; set; }
-
-    [Parameter]
-    public RenderFragment MenuItems { get; set; }
-
-
-    public void RouterNavigate(NavigationContext context)
-    {
-        if (string.IsNullOrWhiteSpace(context.Path)) return;
-
-        var pageType = AppAssembly.ExportedTypes.FirstOrDefault(x => x.Name.ToLower() == context.Path.ToLower());
-        if (pageType == null) return;
-
-        var pageIndex = PageDatas.FindIndex(x => x.Name == pageType.Name);
-        if (pageIndex != -1)
-        {
-            SelectedIndex = pageIndex;
-            return;
-        }
-
-        var pageConfig = pageType.GetCustomAttribute<PageConfigAttribute>();
-        var title = pageConfig?.Title ?? pageType.Name;
-
-        PageDatas.Add(new PageData(pageType.Name, title, new RouteData(pageType, new Dictionary<string, object>())));
-        Tabs.Reload();
-        SelectedIndex = PageDatas.Count - 1;
-    }
-
-    public record PageData(string Name, string Text, RouteData RouteData);
-}

@@ -1,7 +1,7 @@
-﻿namespace CCShell.Shared
+﻿namespace CCShell.Components.Layout
 {
     [AttributeUsage(AttributeTargets.Class)]
-    public class PageConfigAttribute: Attribute
+    public class PageConfigAttribute : Attribute
     {
         public string Title { get; set; }
 

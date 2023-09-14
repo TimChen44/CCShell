@@ -1,0 +1,61 @@
+﻿<RadzenLayout>
+    <RadzenHeader>
+
+        <RadzenRow JustifyContent="JustifyContent.SpaceBetween" AlignItems="AlignItems.Center">
+            <RadzenColumn Size="4">
+                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0">
+                    <RadzenSidebarToggle Click="@(() => sidebar1Expanded = !sidebar1Expanded)" />
+                    <RadzenLabel Text="Easy Shell" />
+                </RadzenStack>
+            </RadzenColumn>
+            <RadzenColumn Size="8">
+                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Right" Gap="0">
+                    <RadzenMenu >
+                        <RadzenMenuItem Text="超超 TimChen44" Icon="user" >
+                            <RadzenMenuItem Text="Buttons" Path="buttons" Icon="account_circle"></RadzenMenuItem>
+                            <RadzenMenuItem Text="Menu" Path="menu" Icon="line_weight"></RadzenMenuItem>
+                            <RadzenMenuItem Text="Dialog" Path="dialog" Icon="perm_media"></RadzenMenuItem>
+                            <RadzenMenuItem Text="Notification" Path="notification" Icon="announcement"></RadzenMenuItem>
+                        </RadzenMenuItem>
+                    </RadzenMenu>
+                </RadzenStack>
+            </RadzenColumn>
+        </RadzenRow>
+    </RadzenHeader>
+    <RadzenSidebar Style="width:auto">
+        <RadzenPanelMenu Multiple=false DisplayStyle="@(sidebar1Expanded?MenuItemDisplayStyle.IconAndText:MenuItemDisplayStyle.Icon)">
+            @MenuItems
+        </RadzenPanelMenu>
+    </RadzenSidebar>
+    <RadzenBody Style="padding:0px;margin:0px">
+        <RadzenTabs @ref="@Tabs" RenderMode="TabRenderMode.Client" @bind-SelectedIndex="@SelectedIndex" class="CCTabs">
+            <Tabs>
+                @foreach (var item in PageDatas)
+                {
+                    var pageData = item;
+                    <RadzenTabsItem Text="@(pageData.Text)">
+                        <RouteView RouteData="@(pageData.RouteData)" />
+                    </RadzenTabsItem>
+                }
+            </Tabs>
+        </RadzenTabs>
+    </RadzenBody>
+</RadzenLayout>
+
+<Router AppAssembly="@AppAssembly" OnNavigateAsync="RouterNavigate">
+    <Found></Found>
+    <NotFound></NotFound>
+</Router>
+
+<style>
+    .CCTabs {
+        height: calc(100vh - 50px);
+        [role="tabpanel"]
+
+    {
+        height: 100%;
+    }
+
+    }
+</style>
+

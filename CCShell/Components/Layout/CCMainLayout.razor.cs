@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Components.Routing;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Routing;
 using Radzen.Blazor;
 using System.Reflection;
 
-namespace CCShell.Shared
+namespace CCShell.Components.Layout
 {
     public partial class CCMainLayout
     {
@@ -24,7 +24,7 @@ namespace CCShell.Shared
         protected override Task OnInitializedAsync()
         {
             Routes = AppAssembly.ExportedTypes.Where(x => x.GetCustomAttribute<RouteAttribute>() != null)
-                .ToDictionary(x => x.GetCustomAttribute<RouteAttribute>().Template, x => x);
+                .ToDictionary(x => x.GetCustomAttribute<RouteAttribute>().Template.TrimStart('/'), x => x);
             return base.OnInitializedAsync();
         }
 
@@ -32,29 +32,28 @@ namespace CCShell.Shared
         {
             if (string.IsNullOrWhiteSpace(context.Path)) return;
 
-            if ( Routes.TryGetValue(context.Path, out var route)==false )
+            if (Routes.TryGetValue(context.Path, out var routeType) == false)
             {
                 //没有找到路由，可以尝试显示404
                 return;
             }
 
-
-            var pageIndex = PageDatas.FindIndex(x => x.Name == pageType.Name);
+            var pageIndex = PageDatas.FindIndex(x => x.Path == context.Path);
             if (pageIndex != -1)
             {
                 SelectedIndex = pageIndex;
                 return;
             }
 
-            var pageConfig = pageType.GetCustomAttribute<PageConfigAttribute>();
-            var title = pageConfig?.Title ?? pageType.Name;
+            var pageConfig = routeType.GetCustomAttribute<PageConfigAttribute>();
+            var title = pageConfig?.Title ?? routeType.Name;
 
-            PageDatas.Add(new PageData(pageType.Name, title, new RouteData(pageType, new Dictionary<string, object>())));
+            PageDatas.Add(new PageData(context.Path, title, new Microsoft.AspNetCore.Components.RouteData(routeType, new Dictionary<string, object>())));
             Tabs.Reload();
             SelectedIndex = PageDatas.Count - 1;
         }
 
-        public record PageData(string Name, string Text, RouteData RouteData);
+        public record PageData(string Path, string Text, Microsoft.AspNetCore.Components.RouteData RouteData);
 
     }
 }

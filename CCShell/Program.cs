@@ -10,6 +10,8 @@ builder.Services.AddRazorComponents()
     .AddServerComponents()
     .AddWebAssemblyComponents();
 
+builder.Services.AddRazorPages();
+
 builder.Services.AddDbContextFactory<DataContext>();
 
 builder.Services.AddScoped<DialogService>();
